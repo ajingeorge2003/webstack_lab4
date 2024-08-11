@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT library (book+)>
+<!ELEMENT book (isbn, name, author, publisher, year)>
+<!ELEMENT isbn (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT publisher (#PCDATA)>
+<!ELEMENT year (#PCDATA)>
+
+<!ATTLIST book id ID #REQUIRED>
