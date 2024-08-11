@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AboutUs</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    
+    <style>
+        #map{
+            height:600px;
+            width:700px;
+        }
+        .map-container {
+            margin-top: 20px;
+        }
+        .card-header {
+            background-color: #232323;
+            color: white;
+            font-size: 1.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center map-container bg-secondary">
+            <div class="col-md-8 bg-secondary">
+                <div class="card bg-light">
+                    <div class="card-header text-center">
+                        Our Location and Route
+                    </div>
+                    <div class="card-body">
+                        <div id="map"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const map = L.map('map').setView([20.5937, 78.9629], 16);
+
+        lat1 = 12.9296
+        lng1 = 77.6069
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
+        {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+
+        let userMarker;
+        let predefinedMarker = L.marker([lat1, lng1]).addTo(map).bindPopup('Our Office');
+
+        if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            userMarker = L.marker([lat, lng]).addTo(map).bindPopup('Your location')
+
+            
+            const bounds = L.latLngBounds([[lat, lng], [lat1, lng1]]);
+            map.fitBounds(bounds);
+            L.Routing.control({
+                    waypoints: [
+                        L.latLng(lat, lng),
+                        L.latLng(lat1, lng1)
+                    ],
+                    routeWhileDragging: true
+                }).addTo(map);
+            });
+            
+        
+    } else{
+        error=>{
+            let msg="";git a
+                    switch(error.code){
+                        case error.PERMISSION_DENIED:
+                            msg="User Denied Permission";
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            msg="Can't Locate User's Position";
+                            break;
+                        case error.TIMEOUT:
+                            msg="Time out";
+                            break;
+                    }
+        }
+    }
+    function openRandomPopup() {
+            // Close all popups first
+            if (userMarker) userMarker.closePopup();
+            predefinedMarker.closePopup();
+
+            // Randomly select one marker to open its popup
+            const random = Math.random();
+            if (random < 0.5 && userMarker) {
+                userMarker.openPopup();
+            } else {
+                predefinedMarker.openPopup();
+            }
+    }
+    setInterval(openRandomPopup, 3000);
+    </script>
+    </div>
+</body>
+</html>
